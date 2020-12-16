@@ -1,12 +1,14 @@
 
 from nlp_gym.envs.common.observation import BaseObservation
-from abc import ABC, abstractclassmethod
-from typing import List
+from abc import ABC, abstractmethod
+from typing import List, Optional
 
 
 class RewardFunction(ABC):
-    @abstractclassmethod
-    def __call__(self, observation: BaseObservation, action: str, targets: List[str]) -> float:
+
+    @classmethod
+    @abstractmethod
+    def __call__(self, observation: BaseObservation, action: str, targets: Optional[List[str]]) -> float:
         """[summary]
 
         Args:
