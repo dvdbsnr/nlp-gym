@@ -5,8 +5,10 @@ from typing import List
 
 
 class RewardFunction(ABC):
-    @abstractclassmethod
-    def __call__(self, observation: BaseObservation, action: str, targets: List[str]) -> float:
+
+    @classmethod
+    @abstractmethod
+    def __call__(self, observation: BaseObservation, action: str, targets: Optional[List[str]]) -> float:
         """[summary]
 
         Args:
