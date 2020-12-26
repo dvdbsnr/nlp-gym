@@ -40,10 +40,6 @@ class TextGenEnv(BaseEnv):
         # set action and observation spaces
         self.action_space = self._get_action_space(vocabulary)
 
-        # For now, the reward function should be independent of any data, just work on pure generated text
-        # # set up default reward
-        # reward_function = EntityF1Score(dense=True, average="micro") if reward_function is None else reward_function
-
         if observation_featurizer is None and return_obs_as_vector:
             observation_featurizer = OneHotFeaturizerForTextGeneration(self.action_space, latent_dim=latent_dim)
 
@@ -55,7 +51,6 @@ class TextGenEnv(BaseEnv):
 
     @staticmethod
     def _get_action_space(vocabulary: List[str]) -> ActionSpace:
-        # NOTE: actions must be in correct order for pretrained model!
         actions = copy.deepcopy(vocabulary)
         action_space = ActionSpace(actions)
         return action_space
