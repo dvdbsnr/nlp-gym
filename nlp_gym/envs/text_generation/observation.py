@@ -55,4 +55,4 @@ class Observation(BaseObservation):
         return self.current_input_index
 
     def get_current_action_history(self) -> List[str]:
-        return self.current_action_history
+        return self.current_action_history + ['PAD'] * (self.max_length - len(self.current_action_history))

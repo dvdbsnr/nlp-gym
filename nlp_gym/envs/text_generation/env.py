@@ -30,12 +30,14 @@ class TextGenEnv(BaseEnv):
                  latent_dim: int = None,
                  SOS: int = 0,
                  EOS: int = 1,
+                 PAD: int = 2,
                  return_obs_as_vector: bool = True):
         self.time_step: Optional[int] = None
         self.current_sample: Optional[DataPoint] = None
 
         self.SOS: int = SOS
         self.EOS: int = EOS
+        self.PAD: int = PAD
 
         # set action and observation spaces
         self.action_space = self._get_action_space(vocabulary)
@@ -87,7 +89,13 @@ class TextGenEnv(BaseEnv):
     def reset(self, sample: Sample = None) -> Union[BaseObservation, np.array]:
         if sample is not None:
             raise NotImplementedError('We dont need datapoints here.')
-        latent_vector = torch.rand(self.observation_featurizer.latent_dim)
+
+        prior_mean = torch.nn.Parameter(torch.zeros(self.observation_featurizer.latent_dim), requires_grad=False)
+        prior_var = torch.nn.Parameter(torch.ones(self.observation_featurizer.latent_dim), requires_grad=False)
+        prior = torch.distributions.Normal(prior_mean, prior_var)
+
+        latent_vector = prior.sample()
+        # latent_vector = latent_vector.fill_(0.)
 
         self.time_step = 0
 
